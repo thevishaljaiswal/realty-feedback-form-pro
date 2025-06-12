@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,7 +6,7 @@ import SurveyBuilder from '@/components/SurveyBuilder';
 import SurveyList from '@/components/SurveyList';
 import SurveyAnalytics from '@/components/SurveyAnalytics';
 import CustomerManager, { Customer } from '@/components/CustomerManager';
-import SurveyDistribution, { SurveyDistribution } from '@/components/SurveyDistribution';
+import SurveyDistribution, { SurveyDistributionData } from '@/components/SurveyDistribution';
 import ResponseViewer from '@/components/ResponseViewer';
 import { PlusCircle, BarChart3, FileText, Users, Send, Eye } from 'lucide-react';
 
@@ -42,7 +41,7 @@ const SurveyManagement = () => {
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
-  const [distributions, setDistributions] = useState<SurveyDistribution[]>([]);
+  const [distributions, setDistributions] = useState<SurveyDistributionData[]>([]);
   const [responses, setResponses] = useState<SurveyResponse[]>([]);
   const [activeTab, setActiveTab] = useState('list');
   const [selectedSurvey, setSelectedSurvey] = useState<Survey | null>(null);
@@ -86,7 +85,7 @@ const SurveyManagement = () => {
   };
 
   const handleSendSurvey = (surveyId: string, customerIds: string[]) => {
-    const distribution: SurveyDistribution = {
+    const distribution: SurveyDistributionData = {
       id: Date.now().toString(),
       surveyId,
       customerIds,

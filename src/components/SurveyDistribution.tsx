@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,7 @@ import { Customer } from '@/components/CustomerManager';
 import { Send, Users, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-export interface SurveyDistribution {
+export interface SurveyDistributionData {
   id: string;
   surveyId: string;
   customerIds: string[];
@@ -22,7 +21,7 @@ interface SurveyDistributionProps {
   customers: Customer[];
   selectedCustomers: string[];
   onSendSurvey: (surveyId: string, customerIds: string[]) => void;
-  distributions: SurveyDistribution[];
+  distributions: SurveyDistributionData[];
 }
 
 const SurveyDistribution: React.FC<SurveyDistributionProps> = ({
