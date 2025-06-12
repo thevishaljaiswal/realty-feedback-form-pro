@@ -37,12 +37,16 @@ const SurveyAnalytics: React.FC<SurveyAnalyticsProps> = ({ survey }) => {
     switch (question.type) {
       case 'rating':
         const ratingCounts = answers.reduce((acc, rating) => {
-          acc[rating] = (acc[rating] || 0) + 1;
+          const numRating = Number(rating);
+          if (!isNaN(numRating)) {
+            acc[numRating] = (acc[numRating] || 0) + 1;
+          }
           return acc;
         }, {} as Record<number, number>);
         
-        const avgRating = answers.length > 0 
-          ? (answers.reduce((sum, rating) => sum + rating, 0) / answers.length).toFixed(1)
+        const validRatings = answers.filter(rating => !isNaN(Number(rating))).map(rating => Number(rating));
+        const avgRating = validRatings.length > 0 
+          ? (validRatings.reduce((sum, rating) => sum + rating, 0) / validRatings.length).toFixed(1)
           : '0';
 
         return {
@@ -57,7 +61,8 @@ const SurveyAnalytics: React.FC<SurveyAnalyticsProps> = ({ survey }) => {
       case 'radio':
       case 'select':
         const optionCounts = answers.reduce((acc, answer) => {
-          acc[answer] = (acc[answer] || 0) + 1;
+          const answerStr = String(answer);
+          acc[answerStr] = (acc[answerStr] || 0) + 1;
           return acc;
         }, {} as Record<string, number>);
 
@@ -71,9 +76,10 @@ const SurveyAnalytics: React.FC<SurveyAnalyticsProps> = ({ survey }) => {
         };
 
       case 'checkbox':
-        const allSelections = answers.flat();
+        const allSelections = answers.flat().filter(selection => selection != null);
         const selectionCounts = allSelections.reduce((acc, selection) => {
-          acc[selection] = (acc[selection] || 0) + 1;
+          const selectionStr = String(selection);
+          acc[selectionStr] = (acc[selectionStr] || 0) + 1;
           return acc;
         }, {} as Record<string, number>);
 
@@ -89,7 +95,7 @@ const SurveyAnalytics: React.FC<SurveyAnalyticsProps> = ({ survey }) => {
       default:
         return {
           type: 'text',
-          sampleResponses: answers.slice(0, 5)
+          sampleResponses: answers.slice(0, 5).map(answer => String(answer))
         };
     }
   };
@@ -249,7 +255,7 @@ const SurveyAnalytics: React.FC<SurveyAnalyticsProps> = ({ survey }) => {
                           cx="50%"
                           cy="50%"
                           outerRadius={80}
-                          label={({ option, percentage }) => `${option}: ${percentage}%`}
+                          label={({ option, percentage }: { option: string; percentage: string }) => `${option}: ${percentage}%`}
                         >
                           {analysis.data.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
