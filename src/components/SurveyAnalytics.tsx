@@ -71,7 +71,7 @@ const SurveyAnalytics: React.FC<SurveyAnalyticsProps> = ({ survey }) => {
           data: Object.entries(optionCounts).map(([option, count]) => ({
             option,
             count,
-            percentage: ((count / answers.length) * 100).toFixed(1)
+            percentage: answers.length > 0 ? ((count / answers.length) * 100).toFixed(1) : '0'
           }))
         };
 
@@ -88,7 +88,7 @@ const SurveyAnalytics: React.FC<SurveyAnalyticsProps> = ({ survey }) => {
           data: Object.entries(selectionCounts).map(([option, count]) => ({
             option,
             count,
-            percentage: ((count / responses.length) * 100).toFixed(1)
+            percentage: responses.length > 0 ? ((count / responses.length) * 100).toFixed(1) : '0'
           }))
         };
 
@@ -255,7 +255,7 @@ const SurveyAnalytics: React.FC<SurveyAnalyticsProps> = ({ survey }) => {
                           cx="50%"
                           cy="50%"
                           outerRadius={80}
-                          label={({ option, percentage }: { option: string; percentage: string }) => `${option}: ${percentage}%`}
+                          label={(entry: any) => `${String(entry.option)}: ${String(entry.percentage)}%`}
                         >
                           {analysis.data.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
